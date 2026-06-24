@@ -28,7 +28,7 @@ describe("ColdChainDashboard — fleet view", () => {
   });
 
   it("renders the app title immediately (before fetch resolves)", () => {
-    expect(screen.getByText("ColdChain")).toBeInTheDocument();
+    expect(screen.getByText("ColdChain Ops")).toBeInTheDocument();
   });
 
   it("shows the unit count after the fleet data loads", async () => {
@@ -50,7 +50,8 @@ describe("ColdChainDashboard — fleet view", () => {
 
   it("orders the critical unit ahead of healthy ones", async () => {
     await screen.findByText("QN-02");
-    const cards = screen.getAllByRole("button");
+    // Skip header/filter buttons; find the first fridge card (contains a unit ID)
+    const cards = screen.getAllByRole("button").filter(b => /^[A-Z]{2}-\d{2}/.test(b.textContent.trim()));
     expect(cards[0].textContent).toContain("QN-02");
   });
 

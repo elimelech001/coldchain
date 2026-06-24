@@ -215,8 +215,11 @@ function FridgeCard({ f, onOpen, isEscalated, onEdit, isRuined }) {
           <ChevronRight size={13} style={{ marginLeft: "auto", color: C.dim }} />
         </div>
       )}
-      <button
+      <div
+        role="button"
+        tabIndex={0}
         onClick={e => { e.stopPropagation(); onEdit(f.id); }}
+        onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.stopPropagation(); onEdit(f.id); } }}
         style={{
           background: "none", border: `1px solid ${C.line}`, color: C.dim,
           borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer",
@@ -224,7 +227,7 @@ function FridgeCard({ f, onOpen, isEscalated, onEdit, isRuined }) {
         }}
       >
         <Edit3 size={11} /> Edit
-      </button>
+      </div>
     </button>
   );
 }

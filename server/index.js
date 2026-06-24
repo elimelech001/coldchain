@@ -62,8 +62,49 @@ app.post("/api/fridges/:id/playbook", (req, res) => {
   res.json({ unitId: fridge.id, steps: playbook(fridge) });
 });
 
-// PATCH /api/fridges/:id — update sensor fields (temp, status, compressor, door)
-const PATCHABLE = new Set(["temp", "status", "compressor", "door"]);
+// POST /api/fridges — add a new unit
+const REQUIRED_FIELDS = ["id", "store", "model", "target", "stock", "install"];
+app.post("/api/fridges", (req, res) => {
+  const body = req.body;
+  const missing = REQUIRED_FIELDS.filter((k) => body[k] == null || body[k] === "");
+  if (missing.length) return res.status(400).json({ error: `Missing required fields: ${missing.join(", ")}` });
+  if (fridges.some((f) => f.id === body.id)) return res.status(409).json({ error: `Unit ${body.id} already exists` });
+  const newFridge = {
+    id: body.id,
+    store: body.store,
+    model: body.model,
+    target: Number(body.target),
+    temp: Number(body.target),
+    status: "healthy",
+    compressor: 100,
+    door: "closed",
+    install: body.install,
+    warranty: body.warranty ?? "valid",
+    warrantyEnds: body.warrantyEnds ?? "",
+    vendor: body.vendor ?? "",
+    sla: body.sla ?? "4h",
+    failures: 0,
+    stock: Number(body.stock),
+    repairTotal: 0,
+    replaceCost: 0,
+    technicianName: body.technicianName ?? "",
+    storeManager: body.storeManager ?? { name: "", phone: "" },
+    history: [],
+  };
+  fridges.push(newFridge);
+  res.status(201).json(newFridge);
+});
+
+// DELETE /api/fridges/:id — remove a unit
+app.delete("/api/fridges/:id", (req, res) => {
+  const idx = fridges.findIndex((f) => f.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: `Unit ${req.params.id} not found` });
+  fridges.splice(idx, 1);
+  res.json({ deleted: req.params.id });
+});
+
+// PATCH /api/fridges/:id — update sensor and config fields
+const PATCHABLE = new Set(["temp", "status", "compressor", "door", "target", "stock", "technicianName", "sla"]);
 app.patch("/api/fridges/:id", (req, res) => {
   const idx = fridges.findIndex((f) => f.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: `Unit ${req.params.id} not found` });

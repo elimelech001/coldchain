@@ -117,7 +117,7 @@ describe("ColdChainDashboard — incident playbook interaction", () => {
   it("opens the incident view with the unit's store and model", () => {
     openUnit("QN-02");
     const modal = screen.getByTestId("incident-modal");
-    expect(within(modal).getByText(/Astoria/)).toBeInTheDocument();
+    expect(within(modal).getAllByText(/Astoria/).length).toBeGreaterThan(0);
     expect(within(modal).getByText(/Response playbook/i)).toBeInTheDocument();
   });
 
@@ -127,15 +127,15 @@ describe("ColdChainDashboard — incident playbook interaction", () => {
     expect(within(modal).getByText(/of stock at risk/i)).toBeInTheDocument();
   });
 
-  it("runs the playbook to completion and marks the incident resolved", () => {
+  it("runs all playbook steps to completion and shows resolved", () => {
     openUnit("QN-02");
     const modal = screen.getByTestId("incident-modal");
-    const runBtn = within(modal).getByRole("button", { name: /Run playbook/i });
-    fireEvent.click(runBtn);
-    for (let i = 0; i < 6; i++) {
-      act(() => { vi.advanceTimersByTime(700); });
-    }
-    expect(within(modal).getByRole("button", { name: /Resolved/i })).toBeInTheDocument();
+    // Execute all 4 steps (they run independently in parallel)
+    const execBtns = within(modal).getAllByRole("button", { name: /Execute/i });
+    execBtns.forEach(btn => fireEvent.click(btn));
+    // Advance through executing phase (1500ms) then awaiting phase (up to 12000ms)
+    act(() => { vi.advanceTimersByTime(14000); });
+    expect(within(modal).getByText(/All steps resolved/i)).toBeInTheDocument();
   });
 
   it("recommends replacing the worn-out QN-02 unit", () => {

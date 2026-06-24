@@ -28,6 +28,12 @@ async function apiPatch(path, body) {
   return res.json();
 }
 
+async function apiDelete(path) {
+  const res = await fetch(`${BASE}${path}`, { method: "DELETE" });
+  if (!res.ok) throw new Error(`API ${res.status} — ${path}`);
+  return res.json();
+}
+
 export const fetchFridges = (status) =>
   apiGet(status ? `/api/fridges?status=${status}` : "/api/fridges");
 
@@ -40,3 +46,7 @@ export const fetchAlerts = () => apiGet("/api/alerts");
 export const triggerPlaybook = (id) => apiPost(`/api/fridges/${id}/playbook`);
 
 export const patchFridge = (id, patch) => apiPatch(`/api/fridges/${id}`, patch);
+
+export const createFridge = (body) => apiPost("/api/fridges", body);
+
+export const deleteFridge = (id) => apiDelete(`/api/fridges/${id}`);

@@ -61,21 +61,27 @@ export function sortByUrgency(fridges) {
 
 // The ordered set of automated response steps for an incident.
 export function playbook(f) {
+  const tech = f.technicianName ? `${f.technicianName} @ ${f.vendor}` : f.vendor;
+  const mgr = f.storeManager;
   return [
     {
       key: "dispatch",
       label: `Dispatch technician — ${f.vendor}`,
-      detail: `Auto-message sent with unit ${f.id}, location, and full fault history. SLA ${f.sla}.`,
+      detail: `${tech} paged — unit ${f.id}, ${f.store}, full fault log attached. SLA ${f.sla}.`,
     },
     {
       key: "relocate",
       label: "Alert store manager to relocate perishables",
-      detail: `Move ~$${f.stock.toLocaleString()} of stock to nearest backup unit.`,
+      detail: mgr
+        ? `${mgr.name} (${f.store}) notified at ${mgr.phone} — move ~$${f.stock.toLocaleString()} of stock to nearest backup unit.`
+        : `Move ~$${f.stock.toLocaleString()} of stock to nearest backup unit.`,
     },
     {
       key: "hold",
       label: "Hold inbound deliveries to this unit",
-      detail: "Routing paused so new product isn't sent to a failing fridge.",
+      detail: mgr
+        ? `${mgr.name} and receiving team notified — inbound routing to ${f.id} paused until unit is cleared.`
+        : `Routing paused so new product isn't sent to a failing fridge.`,
     },
     {
       key: "warranty",

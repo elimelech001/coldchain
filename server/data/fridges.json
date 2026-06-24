@@ -17,6 +17,8 @@
     "stock": 9200,
     "repairTotal": 0,
     "replaceCost": 14000,
+    "technicianName": "Mike Torres",
+    "storeManager": { "name": "Sarah Kim", "phone": "718-555-0142" },
     "history": [
       { "d": "2024-11-02", "t": "Routine service", "who": "Carrier Service NE", "note": "Filters cleaned, gas topped" }
     ]
@@ -39,6 +41,8 @@
     "stock": 3100,
     "repairTotal": 2400,
     "replaceCost": 6500,
+    "technicianName": "Danny Ruiz",
+    "storeManager": { "name": "Sarah Kim", "phone": "718-555-0142" },
     "history": [
       { "d": "2026-01-18", "t": "Compressor short-cycling", "who": "ColdFix Contractors", "note": "Relay replaced — $1,300" },
       { "d": "2025-08-09", "t": "Door gasket leak", "who": "ColdFix Contractors", "note": "Gasket swap — $1,100" }
@@ -62,6 +66,8 @@
     "stock": 5400,
     "repairTotal": 4100,
     "replaceCost": 7000,
+    "technicianName": "Danny Ruiz",
+    "storeManager": { "name": "Marcus Webb", "phone": "718-555-0391" },
     "history": [
       { "d": "2026-04-21", "t": "Compressor failure", "who": "ColdFix Contractors", "note": "Rebuild — $1,600" },
       { "d": "2025-12-03", "t": "Fan motor seized", "who": "ColdFix Contractors", "note": "Motor replaced — $900" },
@@ -87,6 +93,8 @@
     "stock": 8700,
     "repairTotal": 0,
     "replaceCost": 14000,
+    "technicianName": "Mike Torres",
+    "storeManager": { "name": "Marcus Webb", "phone": "718-555-0391" },
     "history": []
   },
   {
@@ -107,6 +115,8 @@
     "stock": 2600,
     "repairTotal": 700,
     "replaceCost": 5200,
+    "technicianName": "Linda Cho",
+    "storeManager": { "name": "Darius Okon", "phone": "973-555-0274" },
     "history": [
       { "d": "2025-03-14", "t": "Lighting ballast", "who": "Carrier Service NE", "note": "LED retrofit — $700" }
     ]
@@ -129,6 +139,8 @@
     "stock": 4800,
     "repairTotal": 850,
     "replaceCost": 7000,
+    "technicianName": "Danny Ruiz",
+    "storeManager": { "name": "Darius Okon", "phone": "973-555-0274" },
     "history": [
       { "d": "2025-09-22", "t": "Sensor calibration", "who": "ColdFix Contractors", "note": "Probe replaced — $850" }
     ]

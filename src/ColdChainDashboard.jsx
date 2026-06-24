@@ -4,7 +4,7 @@ import {
   PackageX, ShieldCheck, ShieldAlert, Snowflake, Activity, DollarSign,
   ChevronRight, X, Send, MapPin, TrendingDown, History, RefreshCw,
 } from "lucide-react";
-import { fetchFridges } from "./api/client.js";
+import { fetchFridges, patchFridge } from "./api/client.js";
 
 /* ───────────────────────── Design tokens ───────────────────────── */
 const C = {
@@ -26,6 +26,7 @@ const STATUS = {
   warning: { c: C.amber, label: "Warning", bg: "rgba(245,184,71,.12)" },
   critical: { c: C.red, label: "Critical", bg: "rgba(251,107,107,.14)" },
   offline: { c: C.dim, label: "Offline", bg: "rgba(138,160,188,.12)" },
+  resolving: { c: "#60a5fa", label: "Resolving", bg: "rgba(96,165,250,.12)" },
 };
 
 /* Exported so tests can use it as mock fetch data without hitting the network. */
@@ -172,7 +173,7 @@ function FridgeCard({ f, onOpen }) {
   );
 }
 
-function PlaybookRunner({ f, onClose }) {
+function PlaybookRunner({ f, onClose, onResolve }) {
   const steps = useMemo(() => playbook(f), [f]);
   const [done, setDone] = useState(steps.map(() => false));
   const [running, setRunning] = useState(false);
@@ -180,7 +181,11 @@ function PlaybookRunner({ f, onClose }) {
   useEffect(() => {
     if (!running) return;
     const idx = done.findIndex(d => !d);
-    if (idx === -1) { setRunning(false); return; }
+    if (idx === -1) {
+      setRunning(false);
+      patchFridge(f.id, { status: "resolving" }).then(() => onResolve(f.id)).catch(() => {});
+      return;
+    }
     const t = setTimeout(() => setDone(p => p.map((d, i) => i === idx ? true : d)), 700);
     return () => clearTimeout(t);
   }, [running, done]);
@@ -437,7 +442,13 @@ export default function ColdChainDashboard() {
         )}
       </div>
 
-      {open && <PlaybookRunner f={open} onClose={() => setOpen(null)} />}
+      {open && (
+        <PlaybookRunner
+          f={open}
+          onClose={() => setOpen(null)}
+          onResolve={(id) => setFridges(prev => prev.map(fridge => fridge.id === id ? { ...fridge, status: "resolving" } : fridge))}
+        />
+      )}
     </div>
   );
 }

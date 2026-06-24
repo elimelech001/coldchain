@@ -81,7 +81,7 @@ const dist = join(__dir, "../dist");
 if (existsSync(dist)) {
   app.use(express.static(dist));
   // SPA fallback — React Router-style deep links work without a CDN rewrite rule.
-  app.get("*", (_req, res) => res.sendFile(join(dist, "index.html")));
+  app.get("/{*splat}", (_req, res) => res.sendFile(join(dist, "index.html")));
 }
 
 export default app;

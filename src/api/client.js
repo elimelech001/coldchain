@@ -1,5 +1,6 @@
 // Empty string = same origin (production). Override with VITE_API_URL for split deploys.
-const BASE = import.meta?.env?.VITE_API_URL ?? (import.meta?.env?.PROD ? "" : "http://localhost:3001");
+// Must use import.meta.env (no optional chaining) so Vite replaces it at build time.
+const BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.PROD ? "" : "http://localhost:3001");
 
 async function apiGet(path) {
   const res = await fetch(`${BASE}${path}`);

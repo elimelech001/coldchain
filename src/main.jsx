@@ -1,9 +1,12 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import ColdChainDashboard from "./ColdChainDashboard.jsx";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ColdChainDashboard />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
